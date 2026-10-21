@@ -22,3 +22,10 @@ function showResults(playerName, totalPoints, correctCount, totalQuestions) {
   saveScore(playerName, totalPoints, correctCount, totalQuestions);
   renderBestScores();
 }
+
+function updateProgress(index, total) {
+  document.getElementById("question-number").textContent =
+    "Question " + (index + 1) + " / " + total;
+  document.getElementById("progress-fill").style.width =
+    ((index + 1) / total) * 100 + "%";
+}
