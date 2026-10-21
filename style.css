@@ -1,4 +1,4 @@
-/* 1. RESET / BASE */
+/* BASE */
 :root {
   --bg: #0b1220;
   --card: #111b2e;
@@ -6,10 +6,10 @@
   --border: #2a3d5f;
   --text: #eef3fb;
   --muted: #9fb0cc;
-  --accent: #2f6fe4;        /* buttons */
-  --accent-light: #6aa3ff;  /* highlights, progress, focus */
+  --accent: #2f6fe4;
+  --accent-light: #6aa3ff;
   --accent-hover: #4a84ee;
-  --amber: #f5b942;         /* timer and top score */
+  --amber: #f5b942;
   --correct: #2fbf71;
   --incorrect: #e5484d;
 }
@@ -26,8 +26,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: radial-gradient(circle at 50% 0%, #16305c 0%, var(--bg) 55%);
-  background-color: var(--bg);
+  background: radial-gradient(circle at 50% 0%, #16305c 0%, var(--bg) 55%) var(--bg);
   color: var(--text);
   font-family: "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
   line-height: 1.5;
@@ -47,7 +46,7 @@ h2 {
 
 ul, ol { list-style: none; }
 
-/* 2. LAYOUT*/
+/* LAYOUT */
 .quiz-card {
   width: 100%;
   max-width: 660px;
@@ -66,9 +65,7 @@ ul, ol { list-style: none; }
   animation: screen-in 0.35s ease;
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
 .intro {
   color: var(--muted);
@@ -80,16 +77,14 @@ ul, ol { list-style: none; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/*3. WELCOME SCREEN */
+/* WELCOME SCREEN */
 .field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-.field label {
-  font-weight: 600;
-}
+.field label { font-weight: 600; }
 
 .field input {
   padding: 0.85rem 1rem;
@@ -102,21 +97,19 @@ ul, ol { list-style: none; }
 }
 
 .field input:hover,
-.field input:focus {
-  border-color: var(--accent-light);
-}
+.field input:focus { border-color: var(--accent-light); }
 
-.field input::placeholder {
-  color: var(--muted);
-}
+.field input::placeholder { color: var(--muted); }
 
-/* Two stat tiles: number of questions and time per question */
-.quiz-info {
+/* Stat tiles (welcome and results screens) */
+.quiz-info,
+.result-stats {
   display: flex;
   gap: 1rem;
 }
 
-.quiz-info li {
+.quiz-info li,
+.result-stats li {
   flex: 1;
   padding: 1rem;
   background-color: var(--surface);
@@ -125,12 +118,14 @@ ul, ol { list-style: none; }
   text-align: center;
 }
 
-.quiz-info strong {
+.quiz-info strong,
+.result-stats strong {
   display: block;
   font-size: 2rem;
   line-height: 1.1;
-  color: var(--text);
 }
+
+.quiz-info strong { color: var(--text); }
 
 .rules li {
   position: relative;
@@ -146,7 +141,7 @@ ul, ol { list-style: none; }
   font-weight: 700;
 }
 
-/* 4. QUESTION SCREEN */
+/* QUESTION SCREEN */
 .question-header {
   display: flex;
   justify-content: space-between;
@@ -178,7 +173,7 @@ ul, ol { list-style: none; }
 }
 
 #progress-fill {
-  width: 10%; /* will be updated later */
+  width: 0;
   height: 100%;
   background-color: var(--accent-light);
   border-radius: 999px;
@@ -193,16 +188,21 @@ ul, ol { list-style: none; }
   color: var(--text);
 }
 
-/* Grid works for 4 buttons (QCM) or 2 buttons (True/False).
-   The counter gives each answer a letter badge (A, B, C, D). */
+/* 4 buttons (QCM) or 2 buttons (True/False).
+   minmax(0, 1fr) lets columns shrink so long answers never overflow the card. */
 #answers-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.85rem;
   counter-reset: answer;
 }
 
-/* 5. RESULTS SCREEN*/
+#feedback {
+  min-height: 1.5rem;
+  font-weight: 600;
+}
+
+/* RESULTS SCREEN */
 .score-display {
   text-align: center;
   color: var(--muted);
@@ -214,26 +214,6 @@ ul, ol { list-style: none; }
   line-height: 1.1;
   font-weight: 800;
   color: var(--accent-light);
-}
-
-.result-stats {
-  display: flex;
-  gap: 1rem;
-}
-
-.result-stats li {
-  flex: 1;
-  padding: 1rem;
-  background-color: var(--surface);
-  border-radius: 12px;
-  color: var(--muted);
-  text-align: center;
-}
-
-.result-stats strong {
-  display: block;
-  font-size: 2rem;
-  line-height: 1.1;
 }
 
 .result-stats li:first-child strong { color: var(--correct); }
@@ -278,24 +258,17 @@ ul, ol { list-style: none; }
   font-size: 0.9rem;
 }
 
-#best-scores li:first-child {
-  border: 1px solid var(--amber);
-}
+#best-scores li:first-child { border: 1px solid var(--amber); }
 
 #best-scores li:first-child::before {
   background-color: var(--amber);
-  color: #0b1220;
+  color: var(--bg);
 }
 
-#best-scores li span:first-child {
-  flex: 1;
-}
+#best-scores li span:first-child { flex: 1; }
+#best-scores li span:last-child  { font-weight: 700; }
 
-#best-scores li span:last-child {
-  font-weight: 700;
-}
-
-/* 6. BUTTONS*/
+/* BUTTONS */
 button {
   font-family: inherit;
   font-size: 1rem;
@@ -338,6 +311,7 @@ button {
   border: 2px solid var(--border);
   border-radius: 12px;
   text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .answer-btn::before {
@@ -360,9 +334,7 @@ button {
   transform: translateY(-1px);
 }
 
-.answer-btn:disabled {
-  cursor: not-allowed;
-}
+.answer-btn:disabled { cursor: not-allowed; }
 
 button:focus-visible,
 input:focus-visible {
@@ -370,7 +342,7 @@ input:focus-visible {
   outline-offset: 2px;
 }
 
-/* 7. FEEDBACK STATES */
+/* FEEDBACK STATES */
 .answer-btn.correct {
   background-color: rgba(47, 191, 113, 0.18);
   border-color: var(--correct);
@@ -378,7 +350,7 @@ input:focus-visible {
 
 .answer-btn.correct::before {
   background-color: var(--correct);
-  color: #0b1220;
+  color: var(--bg);
 }
 
 .answer-btn.incorrect {
@@ -391,22 +363,13 @@ input:focus-visible {
   color: #ffffff;
 }
 
-#feedback {
-  min-height: 1.5rem;
-  font-weight: 600;
-}
-
-/* 8. RESPONSIVE */
+/* RESPONSIVE */
 @media (max-width: 600px) {
   .quiz-card { padding: 1.5rem; }
   h1 { font-size: 1.8rem; }
   #question-text { font-size: 1.3rem; }
   #final-score { font-size: 3rem; }
-  #answers-container { grid-template-columns: 1fr; }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-  .quiz-card { max-width: 580px; }
+  #answers-container { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (prefers-reduced-motion: reduce) {
