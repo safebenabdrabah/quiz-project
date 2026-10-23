@@ -1,89 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JavaScript Quiz</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <main class="quiz-card">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JavaScript Quiz</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="quiz-card">
+      <section id="welcome-screen" class="screen">
+        <h1>JavaScript Quiz</h1>
+        <p class="intro">
+          Test your web development knowledge and see how you rank against other
+          players.
+        </p>
 
-    <!-- SCREEN 1: WELCOME -->
-    <section id="welcome-screen" class="screen">
-      <h1>JavaScript Quiz</h1>
-      <p class="intro">Test your web development knowledge and see how you rank against other players.</p>
+        <div class="field">
+          <label for="player-name">Your name (optional)</label>
+          <input
+            type="text"
+            id="player-name"
+            maxlength="20"
+            placeholder="Enter your name"
+          />
+        </div>
 
-      <div class="field">
-        <label for="player-name">Your name (optional)</label>
-        <input type="text" id="player-name" maxlength="20" placeholder="Enter your name">
-      </div>
+        <ul class="quiz-info">
+          <li><strong>10</strong> questions</li>
+          <li><strong>20</strong> seconds per question</li>
+        </ul>
 
-      <ul class="quiz-info">
-        <li><strong>10</strong> questions</li>
-        <li><strong>20</strong> seconds per question</li>
-      </ul>
+        <h2>How it works</h2>
+        <ul class="rules">
+          <li>Choose one answer for each question.</li>
+          <li>When time runs out, the question counts as incorrect.</li>
+          <li>Faster correct answers earn more points.</li>
+          <li>Your score and the best scores appear at the end.</li>
+        </ul>
 
-      <h2>How it works</h2>
-      <ul class="rules">
-        <li>Choose one answer for each question.</li>
-        <li>When time runs out, the question counts as incorrect.</li>
-        <li>Your score and the best scores appear at the end.</li>
-      </ul>
+        <button type="button" id="start-btn" class="btn btn-primary">
+          Start Quiz
+        </button>
+      </section>
 
-      <button type="button" id="start-btn" class="btn btn-primary">Start Quiz</button>
-    </section>
+      <section id="question-screen" class="screen hidden">
+        <div class="question-header">
+          <p id="question-number"></p>
+          <p class="timer-box">Time left: <span id="timer"></span>s</p>
+        </div>
 
-    <!-- SCREEN 2: QUESTION -->
-    <section id="question-screen" class="screen hidden">
-      <div class="question-header">
-        <p id="question-number">Question 1 / 10</p>
-        <p class="timer-box">Time left: <span id="timer">20</span>s</p>
-      </div>
+        <div class="progress-bar" role="progressbar" aria-label="Quiz progress">
+          <div id="progress-fill"></div>
+        </div>
 
-      <div class="progress-bar" role="progressbar" aria-label="Quiz progress">
-        <div id="progress-fill"></div>
-      </div>
+        <h2 id="question-text"></h2>
 
-      <h2 id="question-text">Which keyword declares a variable that cannot be reassigned?</h2>
+        <div id="answers-container"></div>
 
-      <!-- Four buttons for QCM,only two buttons For True/ False. -->
-      <div id="answers-container">
-        <button type="button" class="answer-btn">var</button>
-        <button type="button" class="answer-btn">let</button>
-        <button type="button" class="answer-btn">const</button>
-        <button type="button" class="answer-btn">static</button>
-      </div>
+        <p id="feedback" aria-live="polite"></p>
 
-      <p id="feedback" aria-live="polite"></p>
+        <button type="button" id="next-btn" class="btn btn-primary" disabled>
+          Next Question
+        </button>
+      </section>
 
-      <button type="button" id="next-btn" class="btn btn-primary" disabled>Next Question</button>
-    </section>
+      <section id="results-screen" class="screen hidden">
+        <h1>Quiz complete!</h1>
+        <p class="intro">Great effort. Here is how you did.</p>
 
-    <!-- SCREEN 3: RESULTS-->
-    <section id="results-screen" class="screen hidden">
-      <h1>Quiz complete!</h1>
-      <p class="intro">Great effort. Here is how you did.</p>
+        <p class="score-display">Score: <span id="final-score"></span></p>
 
-      <p class="score-display">Score: <span id="final-score">8 / 10</span></p>
+        <ul class="result-stats">
+          <li>Correct: <strong id="correct-count"></strong></li>
+          <li>Incorrect: <strong id="incorrect-count"></strong></li>
+        </ul>
 
-      <ul class="result-stats">
-        <li>Correct: <strong id="correct-count">8</strong></li>
-        <li>Incorrect: <strong id="incorrect-count">2</strong></li>
-      </ul>
+        <p id="performance-summary"></p>
 
-      <p id="performance-summary">80% – Very good!</p>
+        <h2>Best scores</h2>
+        <ol id="best-scores"></ol>
 
-      <h2>Best scores</h2>
-      <ol id="best-scores">
-        <li><span>Sara</span><span>10 / 10</span></li>
-        <li><span>Karim</span><span>9 / 10</span></li>
-        <li><span>Player</span><span>8 / 10</span></li>
-      </ol>
+        <button type="button" id="replay-btn" class="btn btn-primary">
+          Play Again
+        </button>
+      </section>
+    </main>
 
-      <button type="button" id="replay-btn" class="btn btn-primary">Play Again</button>
-    </section>
-
-  </main>
-</body>
+    <script src="questions.js"></script>
+    <script src="scores.js"></script>
+    <script src="results.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
