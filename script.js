@@ -12,15 +12,13 @@ const nextBtn = document.getElementById("next-btn");
 // showing  the current question
 function showQuestion() {
   answered = false;
-
   renderAnswers(questions[currentIndex], handleAnswer);
   updateProgress(currentIndex, questions.length);
-
   feedbackEl.textContent = "";
-  nextBtn.disabled = true;
-  nextBtn.textContent =
-    currentIndex === questions.length - 1 ? "See Results" : "Next Question";
 
+  nextBtn.disabled = true;
+  nextBtn.textContent = currentIndex === questions.length - 1 ? "See Results" : "Next Question";
+  
   startTimer(handleTimeout);
 }
 
@@ -60,9 +58,7 @@ function handleAnswer(selectedIndex) {
 
 // handling timeout (no points)
 function handleTimeout() {
-  if (answered) return;
   answered = true;
-
   feedbackEl.textContent = "Time's up! No points this time.";
   revealAnswers();
   nextBtn.disabled = false;
@@ -89,3 +85,25 @@ document.getElementById("start-btn").addEventListener("click", () => {
   document.getElementById("question-screen").classList.remove("hidden");
   showQuestion();
 });
+
+// reset game
+function resetGame() {
+  stopTimer();
+
+  currentIndex = 0;
+  score = 0;
+  correctCount = 0;
+  answered = false;
+  playerName = "Player";
+
+  feedbackEl.textContent = "";
+  nextBtn.disabled = true;
+  document.getElementById("answers-container").textContent = "";
+  document.getElementById("progress-fill").style.width = "0";
+  document.getElementById("player-name").value = "";
+
+  document.getElementById("results-screen").classList.add("hidden");
+  document.getElementById("welcome-screen").classList.remove("hidden");
+}
+
+document.getElementById("replay-btn").addEventListener("click", resetGame);
