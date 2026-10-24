@@ -1,5 +1,6 @@
 "use strict";
 
+// Returns a message depending on the percentage of correct answers
 function getPerformanceMessage(percent) {
   if (percent === 100) return "Perfect score!";
   if (percent >= 80) return "Very good!";
@@ -7,6 +8,7 @@ function getPerformanceMessage(percent) {
   return "Keep learning, you can do better.";
 }
 
+// Fills the results screen, saves the score and shows the best scores
 function showResults(playerName, totalPoints, correctCount, totalQuestions) {
   const maxPoints = totalQuestions * BASE_POINTS;
   const percent = Math.round((correctCount / totalQuestions) * 100);
@@ -23,6 +25,7 @@ function showResults(playerName, totalPoints, correctCount, totalQuestions) {
   renderBestScores();
 }
 
+// Updates "Question X / N" and the width of the progress bar (index starts at 0)
 function updateProgress(index, total) {
   document.getElementById("question-number").textContent =
     "Question " + (index + 1) + " / " + total;

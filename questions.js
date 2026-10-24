@@ -1,7 +1,11 @@
 "use strict";
 
+// Seconds allowed for each question (used by timer.js)
 const QUESTION_TIME = 20;
 
+// List of questions.
+// type: "qcm" = 4 choices, "tf" = True/False
+// answer: index (starting at 0) of the correct option
 const questions = [
   {
     type: "qcm",
@@ -70,18 +74,20 @@ const questions = [
   }
 ];
 
+// Shows the question text and creates one button per option.
+// onAnswer(index) is called when the player clicks a button.
 function renderAnswers(question, onAnswer) {
   const container = document.getElementById("answers-container");
   const questionText = document.getElementById("question-text");
 
   questionText.textContent = question.text;
-  container.textContent = "";
+  container.textContent = ""; // remove the previous buttons
 
   question.options.forEach((option, index) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "answer-btn";
-    btn.textContent = option;
+    btn.textContent = option; // textContent is safe (no HTML injection)
     btn.addEventListener("click", () => onAnswer(index));
     container.appendChild(btn);
   });

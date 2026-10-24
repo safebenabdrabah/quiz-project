@@ -1,15 +1,16 @@
 "use strict";
 
-let currentIndex = 0;
-let score = 0;
-let correctCount = 0;
-let answered = false;
+// Game state
+let currentIndex = 0;     // index of the current question
+let score = 0;            // total points
+let correctCount = 0;     // number of correct answers
+let answered = false;     // true once the player answered (prevents double answers)
 let playerName = "Player";
 
 const feedbackEl = document.getElementById("feedback");
 const nextBtn = document.getElementById("next-btn");
 
-// showing  the current question
+// Shows the current question and starts the timer
 function showQuestion() {
   answered = false;
   renderAnswers(questions[currentIndex], handleAnswer);
@@ -18,11 +19,12 @@ function showQuestion() {
 
   nextBtn.disabled = true;
   nextBtn.textContent = currentIndex === questions.length - 1 ? "See Results" : "Next Question";
-  
+
   startTimer(handleTimeout);
 }
 
-//highlighting the correct answer and wrong one if the player picks it
+// Locks the buttons, highlights the correct answer,
+// and the wrong one if the player picked it
 function revealAnswers(selectedIndex) {
   const buttons = document.querySelectorAll(".answer-btn");
   const correctIndex = questions[currentIndex].answer;
@@ -35,7 +37,7 @@ function revealAnswers(selectedIndex) {
   }
 }
 
-// handling the answer of the player and giving feedback
+// Called when the player clicks an answer: adds points and gives feedback
 function handleAnswer(selectedIndex) {
   if (answered) return;
   answered = true;
@@ -44,10 +46,10 @@ function handleAnswer(selectedIndex) {
   const isCorrect = selectedIndex === questions[currentIndex].answer;
 
   if (isCorrect) {
-   const points = calculatePoints(isCorrect,timeLeft); 
-   score += points;
-   correctCount++;
-   feedbackEl.textContent = "Correct! +" + points + " points";
+    const points = calculatePoints(isCorrect, timeLeft); // faster = more points
+    score += points;
+    correctCount++;
+    feedbackEl.textContent = "Correct! +" + points + " points";
   } else {
     feedbackEl.textContent = "Not quite, the correct answer is highlighted.";
   }
@@ -56,7 +58,7 @@ function handleAnswer(selectedIndex) {
   nextBtn.disabled = false;
 }
 
-// handling timeout (no points)
+// Called when time runs out: no points
 function handleTimeout() {
   answered = true;
   feedbackEl.textContent = "Time's up! No points this time.";
@@ -64,7 +66,7 @@ function handleTimeout() {
   nextBtn.disabled = false;
 }
 
-// next question button
+// "Next Question" button: go to the next question or show the results
 nextBtn.addEventListener("click", () => {
   currentIndex++;
 
@@ -77,7 +79,7 @@ nextBtn.addEventListener("click", () => {
   }
 });
 
-// start button
+// "Start Quiz" button: read the name and show the first question
 document.getElementById("start-btn").addEventListener("click", () => {
   playerName = document.getElementById("player-name").value;
 
@@ -86,7 +88,7 @@ document.getElementById("start-btn").addEventListener("click", () => {
   showQuestion();
 });
 
-// reset game
+// Resets everything and goes back to the welcome screen
 function resetGame() {
   stopTimer();
 
@@ -106,4 +108,5 @@ function resetGame() {
   document.getElementById("welcome-screen").classList.remove("hidden");
 }
 
+// "Play Again" button
 document.getElementById("replay-btn").addEventListener("click", resetGame);
