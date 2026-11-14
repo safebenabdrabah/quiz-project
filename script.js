@@ -25,9 +25,8 @@ function showQuestion() {
 
 // Locks the buttons, highlights the correct answer,
 // and the wrong one if the player picked it
-function revealAnswers(selectedIndex) {
+function revealAnswers(selectedIndex, correctIndex) {
   const buttons = document.querySelectorAll(".answer-btn");
-  const correctIndex = questions[currentIndex].answer;
 
   buttons.forEach((btn) => (btn.disabled = true));
   buttons[correctIndex].classList.add("correct");
@@ -36,33 +35,45 @@ function revealAnswers(selectedIndex) {
     buttons[selectedIndex].classList.add("incorrect");
   }
 }
-
 // Called when the player clicks an answer: adds points and gives feedback
-function handleAnswer(selectedIndex) {
+async function handleAnswer(selectedIndex) {
   if (answered) return;
   answered = true;
   stopTimer();
 
-  const isCorrect = selectedIndex === questions[currentIndex].answer;
+  const secondsLeft = timeLeft; 
 
-  if (isCorrect) {
-    const points = calculatePoints(isCorrect, timeLeft); // faster = more points
-    score += points;
-    correctCount++;
-    feedbackEl.textContent = "Correct! +" + points + " points";
-  } else {
-    feedbackEl.textContent = "Not quite, the correct answer is highlighted.";
+  try {
+    const result = await sendAnswer(questions[currentIndex].id, selectedIndex, secondsLeft);
+
+    if (result.correct) {
+      score += result.points;
+      correctCount++;
+      feedbackEl.textContent = "Correct! +" + result.points + " points";
+    } else {
+      feedbackEl.textContent = "Not quite, the correct answer is highlighted.";
+    }
+
+    revealAnswers(selectedIndex, result.correct_index);
+  } catch (error) {
+    feedbackEl.textContent = "Server error: this answer could not be checked.";
   }
 
-  revealAnswers(selectedIndex);
   nextBtn.disabled = false;
 }
 
 // Called when time runs out: no points
-function handleTimeout() {
+async function handleTimeout() {
   answered = true;
   feedbackEl.textContent = "Time's up! No points this time.";
-  revealAnswers();
+
+  try {
+    const result = await sendAnswer(questions[currentIndex].id, null, 0);
+    revealAnswers(undefined, result.correct_index);
+  } catch (error) {
+    feedbackEl.textContent = "Time's up! (server error)";
+  }
+
   nextBtn.disabled = false;
 }
 
@@ -80,8 +91,15 @@ nextBtn.addEventListener("click", () => {
 });
 
 // "Start Quiz" button: read the name and show the first question
-document.getElementById("start-btn").addEventListener("click", () => {
+document.getElementById("start-btn").addEventListener("click", async () => {
   playerName = document.getElementById("player-name").value;
+
+  try {
+    await loadQuestions();
+  } catch (error) {
+    alert("Could not load the questions. Is the server running?");
+    return;
+  }
 
   document.getElementById("welcome-screen").classList.add("hidden");
   document.getElementById("question-screen").classList.remove("hidden");
