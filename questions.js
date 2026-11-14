@@ -8,6 +8,45 @@ const ANSWER_API = "api/answer.php";
 
 let questions = [];
 
+//loading questions from server without  correct answers
+async function loadQuestions() {
+  const response = await fetch(QUESTIONS_API);
+  if (!response.ok) throw new Error("Could not load questions");
+  questions = await response.json();
+}
+
+//sending the answer to the server and receiving { correct, correct_index, points }
+async function sendAnswer(questionId, selected, timeLeft) {
+  const response = await fetch(ANSWER_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question_id: questionId, selected, time_left: timeLeft })
+  });
+  if (!response.ok) throw new Error("Could not check the answer");
+  return await response.json();
+}
+
+
+// Shows the question text and creates one button per option.
+// onAnswer(index) is called when the player clicks a button.
+function renderAnswers(question, onAnswer) {
+  const container = document.getElementById("answers-container");
+  const questionText = document.getElementById("question-text");
+
+  questionText.textContent = question.text;
+  container.textContent = ""; // remove the previous buttons
+
+  question.options.forEach((option, index) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "answer-btn";
+    btn.textContent = option; // textContent is safe (no HTML injection)
+    btn.addEventListener("click", () => onAnswer(index));
+    container.appendChild(btn);
+  });
+}
+
+
 // List of questions. (For JS work)
 // type: "qcm" = 4 choices, "tf" = True/False
 // answer: index (starting at 0) of the correct option
@@ -78,41 +117,3 @@ let questions = [];
 //     answer: 1
 //   }
 // ];
-
-//loading questions from server without  correct answers
-async function loadQuestions() {
-  const response = await fetch(QUESTIONS_API);
-  if (!response.ok) throw new Error("Could not load questions");
-  questions = await response.json();
-}
-
-//sending the answer to the server and receiving { correct, correct_index, points }
-async function sendAnswer(questionId, selected, timeLeft) {
-  const response = await fetch(ANSWER_API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question_id: questionId, selected, time_left: timeLeft })
-  });
-  if (!response.ok) throw new Error("Could not check the answer");
-  return await response.json();
-}
-
-
-// Shows the question text and creates one button per option.
-// onAnswer(index) is called when the player clicks a button.
-function renderAnswers(question, onAnswer) {
-  const container = document.getElementById("answers-container");
-  const questionText = document.getElementById("question-text");
-
-  questionText.textContent = question.text;
-  container.textContent = ""; // remove the previous buttons
-
-  question.options.forEach((option, index) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "answer-btn";
-    btn.textContent = option; // textContent is safe (no HTML injection)
-    btn.addEventListener("click", () => onAnswer(index));
-    container.appendChild(btn);
-  });
-}
