@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-// correctindex not selected
+// correct index not selected
 $stmt = $pdo->query("SELECT id, type, text, options FROM questions ORDER BY id");
 
 $questions = [];

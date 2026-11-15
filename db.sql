@@ -25,35 +25,14 @@ CREATE TABLE IF NOT EXISTS scores (
 );
 
 -- Sample questions
-INSERT INTO questions (type, text, options, correct_index)
-VALUES
-(
-    'qcm',
-    'Which keyword declares a variable that cannot be reassigned?',
-    '["let", "var", "const", "static"]',
-    2
-),
-(
-    'tf',
-    'JavaScript and Java are the same language.',
-    '["True", "False"]',
-    1
-),
-(
-    'qcm',
-    'What does typeof null return?',
-    '["null", "object", "undefined", "boolean"]',
-    1
-),
-(
-    'qcm',
-    'Which method converts JSON text into a JavaScript object?',
-    '["JSON.stringify()", "JSON.parse()", "JSON.object()", "JSON.convert()"]',
-    1
-),
-(
-    'tf',
-    'JavaScript is a dynamically typed language.',
-    '["True", "False"]',
-    0
-);
+INSERT INTO questions (type, text, options, correct_index) VALUES
+('qcm', 'Which keyword declares a variable that cannot be reassigned?', '["var","let","const","static"]', 2),
+('tf',  'JavaScript and Java are the same language.', '["True","False"]', 1),
+('qcm', 'What does typeof null return?', '["null","object","undefined","number"]', 1),
+('qcm', 'Which method adds an element at the end of an array?', '["push()","pop()","shift()","unshift()"]', 0),
+('tf',  '=== compares both value and type.', '["True","False"]', 0),
+('qcm', 'Which function parses a JSON string into an object?', '["JSON.stringify()","JSON.parse()","JSON.convert()","JSON.object()"]', 1),
+('qcm', 'Which method selects an element by its id?', '["document.querySelectorAll()","document.getElementsByClassName()","document.getElementById()","document.getTag()"]', 2),
+('tf',  'localStorage data is deleted when the browser tab is closed.', '["True","False"]', 1),
+('qcm', 'What does [1, 2, 3].map(n => n * 2) return?', '["[1, 2, 3]","[2, 4, 6]","6","undefined"]', 1),
+('qcm', 'Which function runs code repeatedly at a fixed interval?', '["setTimeout()","setInterval()","requestRepeat()","repeat()"]', 1);
